@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 import { defaultTodos } from "../../static/todos";
+import TodoItem from "./TodoItem";
 
 const TodoController = () => {
   const [todos, setTodos] = useState(defaultTodos);
@@ -12,6 +13,9 @@ const TodoController = () => {
   };
 
   const onDeleteTodoItem = (id) => {
+    const newTodos = todos.filter((todos) => todos.id !== id);
+    setTodos(newTodos);
+
     // SECTION: 2-1번 문제
     // TODO: 투두 리스트 삭제
     // NOTE: filter 메서드를 사용하여 삭제할 아이템을 제외한 나머지 아이템만 반환 후 setTodos로 업데이트
@@ -19,6 +23,17 @@ const TodoController = () => {
   };
 
   const onToggleTodoItem = (id) => {
+    setTodos((prevTodo) =>
+      prevTodo.map((todosList) => {
+        if (todosList.id === id) {
+          return {
+            ...todosList,
+            completed: !todosList.completed,
+          };
+        }
+        return todosList;
+      })
+    );
     // SECTION: 2-2번 문제
     // TODO: 투두 리스트 completed(완료) 상태를 토글
     // NOTE: map 메서드를 사용하여 특정 아이템의 completed 상태를 토글 후 setTodos로 업데이트
@@ -32,13 +47,20 @@ const TodoController = () => {
 
   useEffect(() => {
     if (sortOrder === "asc") {
+      //오름차순
+      setTodos((prevTodo) =>
+        [...prevTodo].sort((a, b) => new Date(a.limit) - new Date(b.limit))
+      );
+
       // SECTION: 3-1번 문제
       // TODO: 투두 리스트 오름차순 정렬
       // NOTE: sort 메서드를 사용하여 `limit`을 기준으로 오름차순 정렬 후 setTodos로 업데이트
       // HINT: `new Date(todo.limit)`을 사용하여 정렬
       return;
     }
-
+    setTodos((prevTodo) =>
+      [...prevTodo].sort((a, b) => new Date(b.limit) - new Date(a.limit))
+    );
     // SECTION: 3-2번 문제
     // TODO: 투두 리스트 내림차순 정렬
     // NOTE: sort 메서드를 사용하여 `limit`을 기준으로 내림차순 정렬 후 setTodos로 업데이트
