@@ -25,13 +25,17 @@ const TodoController = () => {
   const onToggleTodoItem = (id) => {
     setTodos((prevTodo) =>
       prevTodo.map((todosList) => {
-        if (todosList.id === id) {
-          return {
-            ...todosList,
-            completed: !todosList.completed,
-          };
-        }
-        return todosList;
+        return todosList.id === id
+          ? { ...todosList, completed: !todosList.completed }
+          : todosList;
+        // -> 삼항연산자 심화풀이
+        // if (todosList.id === id) {
+        //   return {
+        //     ...todosList,
+        //     completed: !todosList.completed,
+        //   };
+        // }
+        // return todosList;
       })
     );
     // SECTION: 2-2번 문제
